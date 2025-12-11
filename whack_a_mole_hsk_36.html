@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>Đập Chuột – 36 Từ Mới</title>
+<style>
+ body {font-family: Arial; text-align:center; background:#f6f6f6; padding:20px;}
+ h1{color:#e91e63;}
+ #grid{display:grid; grid-template-columns:repeat(3,120px); gap:10px; justify-content:center; margin-top:20px;}
+ .cell{width:120px;height:120px;background:#c8e6c9;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:0.2s;}
+ .active{background:#ffeb3b;}
+ #score{margin-top:20px;font-size:22px;}
+ button{margin-top:20px;padding:10px 20px;font-size:18px;border:none;background:#4caf50;color:white;border-radius:8px;cursor:pointer;}
+ button:hover{background:#43a047;}
+</style>
+</head>
+<body>
+<h1>🐭 Đập Chuột – Ôn 36 Từ Trung–Việt</h1>
+<p>Đập vào ô đúng chữ Hán khi hiện ra!</p>
+<div id="grid"></div>
+<div id="score">Điểm: 0</div>
+<button onclick="startGame()">Bắt đầu</button>
+<script>
+const vocab=[{zh:"命",vi:"số mệnh"},{zh:"绝对",vi:"tuyệt đối"},{zh:"荒岛",vi:"hoang đảo"},{zh:"符合",vi:"phù hợp"},{zh:"不尽然",vi:"không hẳn"},{zh:"荣誉",vi:"vinh dự"},{zh:"喜出望外",vi:"vui mừng ngoài mong đợi"},{zh:"可遇不可求",vi:"hiếm có"},{zh:"少之又少",vi:"cực kỳ ít"},{zh:"甘美",vi:"ngọt ngào"},{zh:"一举两得",vi:"một công đôi việc"},{zh:"境界",vi:"cảnh giới"},{zh:"高尚",vi:"cao thượng"},{zh:"品学兼优",vi:"giỏi giang toàn diện"},{zh:"模范",vi:"gương mẫu"},{zh:"美中不足",vi:"chưa hoàn mỹ"},{zh:"缺乏",vi:"thiếu"},{zh:"幽默",vi:"hài hước"},{zh:"活泼",vi:"hoạt bát"},{zh:"滚雪球",vi:"lăn cầu tuyết"},{zh:"话题",vi:"chủ đề"},{zh:"管",vi:"quản / lo"},{zh:"难得",vi:"hiếm"},{zh:"积极",vi:"tích cực"},{zh:"趣味",vi:"thú vị"},{zh:"窄",vi:"hẹp"},{zh:"黄",vi:"vàng"},{zh:"灵通",vi:"thông thạo"},{zh:"操心",vi:"lo lắng"},{zh:"外行",vi:"người không chuyên"},{zh:"露马脚",vi:"lộ sơ hở"},{zh:"气氛",vi:"bầu không khí"},{zh:"空洞",vi:"rỗng tuếch"},{zh:"充实",vi:"đầy đủ"},{zh:"恰恰",vi:"vừa hay"},{zh:"承认",vi:"thừa nhận"}];
+let active=null,score=0,timer=null,current=null;
+const grid=document.getElementById("grid");
+for(let i=0;i<9;i++){let c=document.createElement("div");c.className="cell";c.dataset.i=i;c.onclick=()=>hit(i);grid.appendChild(c);} 
+function speak(t){let u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';speechSynthesis.speak(u);} 
+function show(){if(active!==null){let old=document.querySelectorAll('.cell')[active];old.classList.remove('active');old.textContent='';}
+let idx=Math.floor(Math.random()*9);
+let cell=document.querySelectorAll('.cell')[idx];
+current=vocab[Math.floor(Math.random()*vocab.length)];
+cell.textContent=current.zh;
+cell.classList.add('active');
+speak(current.zh);
+active=idx;}
+function hit(i){if(i===active){score+=10;} else score-=5;
+document.getElementById('score').textContent="Điểm: "+score;}
+function startGame(){score=0;document.getElementById('score').textContent="Điểm: 0";clearInterval(timer);timer=setInterval(show,1200);} 
+</script>
+</body>
+</html>
