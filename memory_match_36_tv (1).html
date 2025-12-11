@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>记忆配对 – 36 Từ Trung Việt</title>
+<style>
+ body{font-family:Arial;background:#f2f2f2;text-align:center;padding:20px;}
+ h1{color:#333;}
+ #game{display:grid;grid-template-columns:repeat(4,130px);gap:12px;justify-content:center;margin-top:20px;}
+ .card{width:130px;height:130px;background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid #ccc;cursor:pointer;transition:0.3s;}
+ .flipped{background:#ffe4b5;border-color:#ff9800;}
+</style>
+</head>
+<body>
+<h1>🃏 记忆配对 – Ghép Từ Trung–Việt</h1>
+<p>Ghép chữ Hán với nghĩa tiếng Việt. Khi lật sẽ phát âm tiếng Trung.</p>
+<div id="game"></div>
+<script>
+const vocab=[
+ {zh:"命",vi:"số mệnh"},{zh:"绝对",vi:"tuyệt đối"},{zh:"荒岛",vi:"hoang đảo"},{zh:"符合",vi:"phù hợp"},{zh:"不尽然",vi:"không hẳn"},{zh:"荣誉",vi:"vinh dự"},{zh:"喜出望外",vi:"vui mừng ngoài mong đợi"},{zh:"可遇不可求",vi:"hiếm có"},{zh:"少之又少",vi:"cực kỳ ít"},{zh:"甘美",vi:"ngọt ngào"},{zh:"一举两得",vi:"một công đôi việc"},{zh:"境界",vi:"cảnh giới"},{zh:"高尚",vi:"cao thượng"},{zh:"品学兼优",vi:"giỏi giang toàn diện"},{zh:"模范",vi:"gương mẫu"},{zh:"美中不足",vi:"chưa hoàn mỹ"},{zh:"缺乏",vi:"thiếu"},{zh:"幽默",vi:"hài hước"},{zh:"活泼",vi:"hoạt bát"},{zh:"滚雪球",vi:"lăn cầu tuyết"},{zh:"话题",vi:"chủ đề"},{zh:"管",vi:"quản / lo"},{zh:"难得",vi:"hiếm"},{zh:"积极",vi:"tích cực"},{zh:"趣味",vi:"thú vị"},{zh:"窄",vi:"hẹp"},{zh:"黄",vi:"vàng"},{zh:"灵通",vi:"thông thạo"},{zh:"操心",vi:"lo lắng"},{zh:"外行",vi:"người không chuyên"},{zh:"露马脚",vi:"lộ sơ hở"},{zh:"气氛",vi:"bầu không khí"},{zh:"空洞",vi:"rỗng tuếch"},{zh:"充实",vi:"đầy đủ"},{zh:"恰恰",vi:"vừa hay"},{zh:"承认",vi:"thừa nhận"}
+];
+let cards=[],flipped=[],lock=false;
+function speak(t){let u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';speechSynthesis.speak(u);} 
+function init(){const game=document.getElementById('game');game.innerHTML="";cards=[];
+vocab.forEach(v=>{cards.push({text:v.zh,pair:v.vi,type:'zh'});cards.push({text:v.vi,pair:v.zh,type:'vi'});});
+cards.sort(()=>Math.random()-0.5);
+cards.forEach((c,i)=>{let div=document.createElement('div');div.className='card';div.dataset.i=i;div.onclick=()=>flip(div);game.appendChild(div);});}
+function flip(card){if(lock)return;const i=card.dataset.i;if(card.classList.contains('flipped'))return;
+card.classList.add('flipped');card.textContent=cards[i].text;
+if(cards[i].type==='zh') speak(cards[i].text);
+flipped.push(card);
+if(flipped.length===2){lock=true;let[c1,c2]=flipped;let a=cards[c1.dataset.i],b=cards[c2.dataset.i];
+if(a.pair===b.text||b.pair===a.text){setTimeout(()=>{c1.style.visibility='hidden';c2.style.visibility='hidden';flipped=[];lock=false;},600);} 
+else{setTimeout(()=>{c1.classList.remove('flipped');c2.classList.remove('flipped');c1.textContent='';c2.textContent='';flipped=[];lock=false;},800);} }
+}
+init();
+</script>
+</body>
+</html>
